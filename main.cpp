@@ -130,12 +130,19 @@ void display(void){
 void idleFun ( void )
 {
 	struct timeval tt1, tt2;
-	int it = 0;
+	static int it = 0;
+	static struct timeval tt3, tt4;
+	tt3=tt4;
+	gettimeofday(&tt4, NULL);
+
 	gettimeofday(&tt1, NULL);
 	animate();
 	gettimeofday(&tt2, NULL);
 	int milliSeconds = (tt2.tv_sec - tt1.tv_sec) * 1000 + (tt2.tv_usec - tt1.tv_usec)/1000;
-	cout<<"Iteration "<<it<<" : "<<milliSeconds<<"ms"<<endl<<endl;
+	cout<<"Iteration "<<it<<" : "<<milliSeconds<<"ms"<<endl;
+	int milliSeconds2 = (tt4.tv_sec - tt3.tv_sec) * 1000 + (tt4.tv_usec - tt3.tv_usec)/1000;
+	cout<<"Actual   "<<it<<" : "<<milliSeconds2<<"ms"<<endl<<endl;
+
 	it++;
 	glutSetWindow ( winId );
 	glutPostRedisplay ( );
