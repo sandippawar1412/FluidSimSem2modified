@@ -5,7 +5,7 @@
 
 #include "GridStag.h"
 #include "Particles.h"
-
+#include <omp.h>
 #include "pcgsolver/sparse_matrix.h"
 #include "pcgsolver/pcg_solver.h"
 
@@ -46,7 +46,11 @@ public:
 	void markFluidCells();	
 	void extrapolate2D(matrix<double> &grid, matrix<int> &valid);
 
+<<<<<<< HEAD
 	double getVelInterpolated(double x,double y, matrix<double> &mat);
+=======
+	double getVelInterpolated(double x,double y, matrix<double>& mat);
+>>>>>>> master
 
 	void solvePressureBridson(float dt);
 	//Solver data
@@ -55,7 +59,11 @@ public:
 	std::vector<double> rhs;
 	std::vector<double> pressure;
 
+<<<<<<< HEAD
 	void RK2(double &posx, double &posy,matrix<double> &u, matrix<double> &v, double dt);
+=======
+	void RK2(double &posx, double &posy,matrix<double>& u, matrix<double>& v, double dt);
+>>>>>>> master
 	void setValidVelocity(int val);
 	void addViscosity(double,double) ;
 	matrix<double> addVisc_Helper(matrix<double>, double, double , int );
