@@ -197,7 +197,7 @@ void FluidSim::solvePressureBridson(float dt) { //keep
 	matrix1.zero();
 	//Build the linear system for pressure
 	double scale =  (dt / (double)(sGrid->dx * sGrid->dx));
-	matrix<double> cellType = sGrid->cellType;
+	matrix<double>& cellType = sGrid->cellType;
 	for(int j = 1; j < sGrid->nY-1; ++j) {
 		for(int i = 1; i <  sGrid->nX-1; ++i) {
 			int index = i + sGrid->nX*j;
@@ -276,40 +276,16 @@ void FluidSim::solvePressureBridson(float dt) { //keep
 					sGrid->v(y+1,x) -= scale * ((sGrid->p(y+1,x)) - (sGrid->p(y,x)));
 				}
 			}
-
-		/*for(int y=1; y < sGrid->nY-1;y++)
-				for(int x=1; x <= sGrid->nX-1;x++)
-					if(fabs(sGrid->u(y,x))<0.001)
-						sGrid->u(y,x) = 0;
-
-			for(int y=1; y <=sGrid->nY-1;y++)
-				for(int x=1; x < sGrid->nX-1;x++)
-					if(fabs(sGrid->v(y,x))<0.001)
-						sGrid->v(y,x) = 0;
-
-			setValidVelocity(1);
-			for(int y=1; y < sGrid->nY-1;y++)
-				for(int x=1; x <= sGrid->nX-1;x++)
-					if(!uValid(y,x))
-						sGrid->u(y,x) = 0;
-
-			for(int y=1; y <=sGrid->nY-1;y++)
-				for(int x=1; x < sGrid->nX-1;x++)
-					if(!vValid(y,x))
-						sGrid->v(y,x) = 0;
-			setValidVelocity(0);
-		 */		}
-
+	}
 }
-
 //-----Extrapolation........
 void FluidSim :: extrapolate2D(matrix<double> &grid, matrix<int> &valid) //keep
 {
-	matrix<int> old_valid = valid;
-
+	matrix<int> old_valid ;//= valid;
+	matrix<double> temp_grid;
 	for(int layers = 0; layers < 2; ++layers) {
 		old_valid = valid;
-		matrix<double> temp_grid = grid;
+		temp_grid = grid;
 		int nj = grid.size2()-1;
 		int ni = grid.size1()-1;
 		for( int j = 1; j <  (int)grid.size2()-1; ++j)
@@ -354,7 +330,7 @@ void FluidSim :: calculateLevelSetDistance(){//keep
 				sGrid->distanceLevelSet(y,x) = -1;
 			}
 			else
-				sGrid->distanceLevelSet(y, x) = sGrid->nX*2+10;
+				sGrid->distanceLevelSet(y, x) = 2100;//some constant value//sGrid->nX*2+10;
 		}
 
 	for(int l=0; l<2;l++){
@@ -656,7 +632,7 @@ void FluidSim :: markFluidCells() //keep
 	double dx = sGrid->dx;
 
 	sGrid->cellType.clear();
-	sGrid->isFluidBoundary.clear();
+	//sGrid->isFluidBoundary.clear();
 	for (unsigned int i = 0; i < sGrid->fluidParticles.size(); i++) {
 		int x = int(sGrid->fluidParticles.at(i)->x / dx);
 		int y = int(sGrid->fluidParticles.at(i)->y / dx);
